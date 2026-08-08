@@ -89,3 +89,6 @@ echo "DASH PACKAGING COMPLETE!"
 echo "========================================="
 ls -lh "$OUTPUT_DIR/"
 Save and exit nano: Press Ctrl+X, then Y, then Enter.
+
+# How to run the HTTP local server
+python -m http.server 8000/5000
