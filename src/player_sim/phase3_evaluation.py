@@ -26,9 +26,17 @@ history_buffer = sim_buffer.simulate(network_trace, mode="buffer")
 # -----------------------------
 qoe_model = QoEModel()
 
-qoe_rate = qoe_model.compute(history_rate, sim_rate.rebuffer_time)
-qoe_buffer = qoe_model.compute(history_buffer, sim_buffer.rebuffer_time)
+qoe_rate = qoe_model.compute(
+    history_rate,
+    sim_rate.rebuffer_time,
+    sim_rate.switches
+)
 
+qoe_buffer = qoe_model.compute(
+    history_buffer,
+    sim_buffer.rebuffer_time,
+    sim_buffer.switches
+)
 print("=== Phase 3 Evaluation ===")
 print("Rate-Based QoE:", qoe_rate)
 print("Buffer-Based QoE:", qoe_buffer)
