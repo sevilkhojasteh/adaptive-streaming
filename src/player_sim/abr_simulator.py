@@ -29,6 +29,9 @@ class ABRSimulator:
     # Buffer-Based ABR
     # -------------------------
     def buffer_based_decision(self):
+        """
+        Simple buffer-based logic:
+        """
         if self.buffer < 4:
             return self.bitrates[0]
         elif self.buffer < 8:
