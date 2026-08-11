@@ -21,6 +21,7 @@ for ep in range(episodes):
     total_reward = 0.0
     step = 0
 
+    # ---- inner loop: one episode ----
     while True:
         action = agent.select_action(state)
         next_state, reward, done = env.step(action)
@@ -35,14 +36,18 @@ for ep in range(episodes):
         step += 1
         if done:
             break
-        
-        if (ep + 1) % 50 == 0 or ep == episodes - 1:
-            agent.save(f"models/rl_abr_ep{ep+1}.pt")
-            print(f"  💾 Saved model at episode {ep+1}")
+    # ---- end inner loop ----
 
     agent.decay_epsilon()
     reward_history.append(total_reward)
     avg = np.mean(reward_history[-20:])
     print(f"Ep {ep:3d} | Reward: {total_reward:8.2f} | Avg20: {avg:8.2f} | ε: {agent.epsilon:.3f}")
-    np.save("results/reward_history.npy", np.array(reward_history))
-    print("✅ Training complete. Reward history saved.")
+
+    # ---- save checkpoint every 50 episodes ----
+    if (ep + 1) % 50 == 0 or ep == episodes - 1:
+        agent.save(f"models/rl_abr_ep{ep+1}.pt")
+        print(f"  💾 Saved model at episode {ep+1}")
+
+# ---- after ALL episodes finish ----
+np.save("results/reward_history.npy", np.array(reward_history))
+print("\n✅ Training complete. Reward history saved to results/reward_history.npy")
