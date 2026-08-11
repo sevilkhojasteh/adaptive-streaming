@@ -4,10 +4,9 @@ from trace_loader import load_random_trace
 import numpy as np
 
 bitrates = [400, 800, 1500, 3000, 6000]
+trace = load_random_trace("data/network_traces")[:200]
 
-env_trace = load_random_trace("data/network_traces")[:200]
-env = StreamingEnv(env_trace, bitrates)
-
+env = StreamingEnv(trace, bitrates)
 agent = RL_ABR(state_dim=3, action_dim=len(bitrates))
 
 episodes = 300
@@ -22,24 +21,18 @@ for ep in range(episodes):
         action = agent.select_action(state)
         next_state, reward, done = env.step(action)
 
-        # ✅ scale reward to a sane range (very important!)
-        scaled_reward = reward / 1000.0
+        agent.store((state, action, reward, next_state, float(done)))
 
-        agent.store((state, action, scaled_reward, next_state, float(done)))
-
-        # ✅ train every 4 steps instead of every step
         if step % 4 == 0:
             agent.train()
 
         state = next_state
         total_reward += reward
         step += 1
-
         if done:
             break
 
     agent.decay_epsilon()
     reward_history.append(total_reward)
-
     avg = np.mean(reward_history[-20:])
-    print(f"Ep {ep:3d} | Reward: {total_reward:10.1f} | Avg20: {avg:10.1f} | ε: {agent.epsilon:.3f}")
+    print(f"Ep {ep:3d} | Reward: {total_reward:8.2f} | Avg20: {avg:8.2f} | ε: {agent.epsilon:.3f}")
