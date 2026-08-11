@@ -12,7 +12,7 @@ env = StreamingEnv(trace, bitrates)
 
 agent = RL_ABR(state_dim=3, action_dim=len(bitrates))
 
-episodes = 20
+episodes = 100
 
 for ep in range(episodes):
     state = env.reset()
