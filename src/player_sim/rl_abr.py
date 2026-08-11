@@ -92,3 +92,23 @@ class RL_ABR:
 
     def decay_epsilon(self):
         self.epsilon = max(self.epsilon_min, self.epsilon * self.epsilon_decay)
+
+    def save(self, path):
+        import os
+        os.makedirs(os.path.dirname(path), exist_ok=True) if os.path.dirname(path) else None
+        torch.save({
+            'model':        self.model.state_dict(),
+            'target_model': self.target_model.state_dict(),
+            'optimizer':    self.optimizer.state_dict(),
+            'epsilon':      self.epsilon,
+            'train_step':   self.train_step,
+        }, path)
+
+    def load(self, path):
+        ckpt = torch.load(path, map_location='cpu')
+        self.model.load_state_dict(ckpt['model'])
+        self.target_model.load_state_dict(ckpt['target_model'])
+        self.optimizer.load_state_dict(ckpt['optimizer'])
+        self.epsilon    = ckpt['epsilon']
+        self.train_step = ckpt.get('train_step', 0)
+        self.model.eval()
