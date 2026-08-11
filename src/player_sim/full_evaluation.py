@@ -7,7 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from streaming_env import StreamingEnv
-from abr_streaming import ABRSimulator
+from abr_simulator import ABRSimulator
 from rl_abr import RL_ABR
 from trace_loader import load_random_trace
 from metrics import QoEModel
