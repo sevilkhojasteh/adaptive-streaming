@@ -1,6 +1,5 @@
 """
 Phase 5 — Full evaluation of Rate-Based, Buffer-Based, and RL ABR agents.
-Runs each algorithm on N distinct traces, computes QoE, and produces plots.
 """
 import os
 import random
@@ -10,6 +9,7 @@ import matplotlib.pyplot as plt
 from streaming_env import StreamingEnv
 from abr_simulator import ABRSimulator
 from rl_abr import RL_ABR
+from trace_loader import load_trace
 from metrics import QoEModel
 
 # -------- CONFIG --------
@@ -29,27 +29,6 @@ qoe_model = QoEModel(alpha=4.3, beta=1.0, mode="log")
 # =========================================================
 # Helpers
 # =========================================================
-def load_trace_file(path):
-    """
-    Load bandwidth values from a trace file.
-    Format: "timestamp bandwidth_mbps" per line.
-    Converts Mbps → kbps to match the simulator's units.
-    """
-    values = []
-    with open(path) as f:
-        for line in f:
-            line = line.strip()
-            if not line:
-                continue
-            parts = line.split()
-            try:
-                mbps = float(parts[-1])
-                values.append(mbps * 1000.0)      # ← convert to kbps
-            except ValueError:
-                continue
-    return values
-
-
 def evaluate_rl(trace, agent):
     """Run the trained DQN agent deterministically on one trace."""
     env = StreamingEnv(trace, BITRATES)
@@ -81,18 +60,17 @@ def main():
     agent = RL_ABR(state_dim=3, action_dim=len(BITRATES))
     agent.load(MODEL_PATH)
 
-    # ---- Gather DISTINCT trace files once ----
+    # ---- Gather DISTINCT trace files ----
     all_files = sorted(
         f for f in os.listdir(TRACE_DIR)
         if os.path.isfile(os.path.join(TRACE_DIR, f))
-        and f.endswith(".txt")                       # ← only trace files
+        and f.endswith(".txt")
     )
-
     random.seed(SEED)
     random.shuffle(all_files)
     selected_files = all_files[:NUM_TRACES]
 
-    print(f"Found {len(all_files)} traces in {TRACE_DIR}, "
+    print(f"Found {len(all_files)} trace files in {TRACE_DIR}, "
           f"using {len(selected_files)} of them.\n")
 
     # ---- Prepare result containers ----
@@ -103,7 +81,7 @@ def main():
 
     # ---- Loop over traces ----
     for i, fname in enumerate(selected_files):
-        trace = load_trace_file(os.path.join(TRACE_DIR, fname))[:TRACE_LEN]
+        trace = load_trace(os.path.join(TRACE_DIR, fname))[:TRACE_LEN]
 
         if len(trace) < TRACE_LEN:
             print(f"  [skip] {fname} too short ({len(trace)} < {TRACE_LEN})")
@@ -187,7 +165,7 @@ def main():
     print(f"\n✅ Saved figure → {out_path}")
     plt.show()
 
-    # ---- Save raw results for reproducibility ----
+    # ---- Save raw results ----
     np.savez(os.path.join(RESULTS_DIR, "eval_results.npz"),
              qoe=results, rebuffers=rebuffers,
              bitrates=bitrates_used, switches=switch_counts)
