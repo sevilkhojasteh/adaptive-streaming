@@ -1,4 +1,3 @@
-```markdown
 # 🎥 Adaptive Video Streaming with Deep Reinforcement Learning
 
 An end-to-end research prototype for **Adaptive Bitrate (ABR) selection** in DASH video streaming. A **Deep Q-Network (DQN)** agent learns a QoE-maximizing policy that significantly outperforms classical heuristic algorithms on real network traces.
@@ -232,7 +231,5 @@ MIT © 2026
 Built as part of a self-directed M2-level research project on adaptive multimedia streaming with deep learning. Suitable for internship applications at video streaming companies (Netflix, Ateme, Harmonic), telecom operators (Orange, Nokia, Ericsson), and multimedia research labs (INRIA, Telecom Paris, CEA List).
 
 **Contact:** *sevilkhojasteh@gmail.com* • **GitHub:** *@sevilkhojasteh*
-```
 
-he README will render with the plots inline. This is what recruiters will see. ✨
 
