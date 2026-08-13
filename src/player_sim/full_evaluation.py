@@ -31,9 +31,9 @@ qoe_model = QoEModel(alpha=4.3, beta=1.0, mode="log")
 # =========================================================
 def load_trace_file(path):
     """
-    Load bandwidth values (kbps) from a trace file.
-    Works for both 1-column and 2-column formats
-    (takes the LAST numeric value on each line).
+    Load bandwidth values from a trace file.
+    Format: "timestamp bandwidth_mbps" per line.
+    Converts Mbps → kbps to match the simulator's units.
     """
     values = []
     with open(path) as f:
@@ -43,7 +43,8 @@ def load_trace_file(path):
                 continue
             parts = line.split()
             try:
-                values.append(float(parts[-1]))
+                mbps = float(parts[-1])
+                values.append(mbps * 1000.0)      # ← convert to kbps
             except ValueError:
                 continue
     return values
@@ -84,7 +85,9 @@ def main():
     all_files = sorted(
         f for f in os.listdir(TRACE_DIR)
         if os.path.isfile(os.path.join(TRACE_DIR, f))
+        and f.endswith(".txt")                       # ← only trace files
     )
+
     random.seed(SEED)
     random.shuffle(all_files)
     selected_files = all_files[:NUM_TRACES]
