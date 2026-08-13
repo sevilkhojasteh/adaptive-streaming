@@ -1,20 +1,73 @@
-# Ignore encoded videos
-data/encoded_video/*.mp4
-data/encoded_video/*.m4s
-data/encoded_video/*.mpd
-
-# Ignore raw videos
-data/raw_video/*.mp4
-
-# Ignore network traces
-data/network_traces/
-
-# Ignore results
-results/
-
-# Ignore Python cache
+# ============================================
+# Python
+# ============================================
 __pycache__/
 *.pyc
+*.pyo
+*.egg-info/
 
-# macOS
+# ============================================
+# Virtual environments
+# ============================================
+streaming_env/
+venv/
+.venv/
+env/
+
+# ============================================
+# Model checkpoints (large, regeneratable)
+# ============================================
+models/
+*.pt
+*.pth
+*.ckpt
+
+# ============================================
+# Data — ignore everything by default,
+# then whitelist only the generator script
+# ============================================
+data/**
+!data/
+!data/network_traces/
+!data/network_traces/generate_traces.py
+
+# ============================================
+# Video / DASH artifacts (large binary files)
+# ============================================
+*.mp4
+*.m4s
+*.mpd
+*.m3u8
+*.ts
+*.webm
+*.mkv
+
+# ============================================
+# OS junk
+# ============================================
 .DS_Store
+**/.DS_Store
+Thumbs.db
+desktop.ini
+
+# ============================================
+# IDEs
+# ============================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ============================================
+# Results — ignore raw data but KEEP PNG plots
+# ============================================
+results/*
+!results/
+!results/*.png
+!results/.gitkeep
+
+# ============================================
+# Logs
+# ============================================
+*.log
