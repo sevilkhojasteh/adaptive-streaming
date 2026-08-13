@@ -1,5 +1,3 @@
-Here's your complete, portfolio-ready `README.md` file — drop it in your project root:
-
 ```markdown
 # 🎥 Adaptive Video Streaming with Deep Reinforcement Learning
 
@@ -236,33 +234,5 @@ Built as part of a self-directed M2-level research project on adaptive multimedi
 **Contact:** *sevilkhojasteh@gmail.com* • **GitHub:** *@sevilkhojasteh*
 ```
 
----
-
-## 📝 Before You Commit
-
-1. **Update these placeholders at the bottom:**
-   - `your.email@example.com` → your real email
-   - `@yourusername` → your GitHub handle
-   - `2025` → current year if different
-
-2. **Verify both images exist:**
-   ```bash
-   ls results/abr_comparison.png results/training_curve.png
-   ```
-   If `training_curve.png` doesn't exist yet, run `python src/player_sim/plot_training.py` first.
-
-3. **Save the file:**
-   ```bash
-   nano README.md
-   # paste, save with Ctrl+O, Enter, Ctrl+X
-   ```
-
-4. **Commit and push:**
-   ```bash
-   git add README.md results/*.png requirements.txt .gitignore
-   git commit -m "Add portfolio README with results and architecture"
-   git push origin main
-   ```
-
-5. **Check on GitHub** — the README will render with the plots inline. This is what recruiters will see. ✨
+he README will render with the plots inline. This is what recruiters will see. ✨
 
